@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
 
 class AddUser extends Component {
   state = {
@@ -37,6 +38,7 @@ class AddUser extends Component {
             <input
               className="form-control"
               name="email"
+              type="email"
               value={this.state.formData.email}
               onChange={this.handleChange}
               required
@@ -87,6 +89,7 @@ class AddUser extends Component {
           >
             ADD USER
           </button>
+          <Link to='/users'>CANCEL</Link>
         </form>
       </>
     );

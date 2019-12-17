@@ -32,6 +32,7 @@ class EditUser extends Component {
             <input
               className="form-control"
               name="email"
+              type="email"
               value={this.state.formData.email}
               onChange={this.handleChange}
               required
@@ -42,6 +43,7 @@ class EditUser extends Component {
             <input
               className="form-control"
               name="password"
+              type="password"
               value={this.state.formData.password}
               onChange={this.handleChange}
               required
@@ -81,7 +83,7 @@ class EditUser extends Component {
           >
             SAVE USER
           </button>&nbsp;&nbsp;
-          <Link to='/'>CANCEL</Link>
+          <Link to='/users'>CANCEL</Link>
         </form>
       </>
     );

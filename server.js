@@ -1,13 +1,14 @@
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var favicon = require('serve-favicon');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const favicon = require('serve-favicon');
 
+require('dotenv').config();
 require('./config/database');
 
-var usersRouter = require('./routes/api/users');
+const usersRouter = require('./routes/api/users');
 
-var app = express();
+const app = express();
 
 app.use(favicon(path.join(__dirname, 'build', 'favicon.ico')));
 app.use(logger('dev'));

@@ -26,7 +26,7 @@ function UserCard({user, handleDeleteUser}) {
         <Link
           className='btn btn-xs btn-warning'
           to={{
-            pathname: '/edit',
+            pathname: '/user/edit',
             state: {user}
           }}
         >

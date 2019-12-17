@@ -1,6 +1,6 @@
-var express = require('express');
-var router = express.Router();
-var usersCtrl = require('../../controllers/api/users');
+const express = require('express');
+const router = express.Router();
+const usersCtrl = require('../../controllers/api/users');
 
 /* GET /api/users */
 router.get('/', usersCtrl.index);
