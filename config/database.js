@@ -1,18 +1,13 @@
-// const mongoose = require('mongoose');
+const Sequelize = require('sequelize');
 
-// mongoose.connect(
-//   process.env.MONGODB_URL,
-//   { useNewUrlParser: true,
-//     useCreateIndex: true,
-//     useFindAndModify: false
-//   }
-// );
+const sequelize = new Sequelize(process.env.POSTGRESQL_URL);
 
-// const db = mongoose.connection;
+sequelize.authenticate()
+.then(() => {
+  console.log('Connected to PostgreSQL via Amazon RDS successfully')
+})
+.catch(err => {
+  console.error('Unable to connect to the hosted database: ', err);
+});
 
-// db.on('connected', function() {
-//   console.log(`Connected to MongoDB at ${db.host}:${db.port}`);
-// });
-
-
-module.exports = 'mongodb connection unneeded';
+module.exports = sequelize;

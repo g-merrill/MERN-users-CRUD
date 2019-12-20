@@ -13,18 +13,8 @@
 
 // module.exports = mongoose.model('User', userSchema);
 
-
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize(process.env.POSTGRESQL_URL);
-
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connected to PostgreSQL via Amazon RDS successfully')
-  })
-  .catch(err => {
-    console.error('Unable to connect to the hosted database: ', err);
-  });
+const sequelize = require('../config/database');
 
 const User = sequelize.define('user', {
   firstName: {
@@ -55,10 +45,4 @@ User.sync({ force: true }).then(() => {
   });
 });
 
-let db = {};
-db.User = User;
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-
-module.exports = db;
+module.exports = User;

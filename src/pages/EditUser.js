@@ -54,7 +54,7 @@ class EditUser extends Component {
             <input
               className="form-control"
               name="firstName"
-              value={this.state.formData.firstName}
+              value={this.state.formData.firstName || ''}
               onChange={this.handleChange}
             />
           </div>
@@ -63,7 +63,7 @@ class EditUser extends Component {
             <input
               className="form-control"
               name="lastName"
-              value={this.state.formData.lastName}
+              value={this.state.formData.lastName || ''}
               onChange={this.handleChange}
             />
           </div>
@@ -72,7 +72,7 @@ class EditUser extends Component {
             <input
               className="form-control"
               name="username"
-              value={this.state.formData.username}
+              value={this.state.formData.username || ''}
               onChange={this.handleChange}
             />
           </div>
