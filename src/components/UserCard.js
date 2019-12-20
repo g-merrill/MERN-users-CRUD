@@ -34,7 +34,7 @@ function UserCard({user, handleDeleteUser}) {
         </Link>
         <button
           className='btn btn-xs btn-danger margin-left-10'
-          onClick={() => handleDeleteUser(user._id)}
+          onClick={() => handleDeleteUser(user.id)}
         >
           DELETE
         </button>

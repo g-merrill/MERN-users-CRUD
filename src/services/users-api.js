@@ -14,7 +14,7 @@ export function create(user) {
 }
 
 export function update(user) {
-  return fetch(`${BASE_URL}/${user._id}`, {
+  return fetch(`${BASE_URL}/${user.id}`, {
     method: 'PUT',
     headers: {'content-type': 'application/json'},
     body: JSON.stringify(user)

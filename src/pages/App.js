@@ -22,7 +22,7 @@ class App extends Component {
   handleUpdateUser = async updatedUserData => {
     const updatedUser = await userAPI.update(updatedUserData);
     const newUsersArray = this.state.users.map(u => 
-      u._id === updatedUser._id ? updatedUser : u
+      u.id === updatedUser.id ? updatedUser : u
     );
     this.setState(
       {users: newUsersArray},
@@ -35,7 +35,7 @@ class App extends Component {
     await userAPI.deleteOne(id);
     this.setState(state => ({
       // Yay, filter returns a NEW array
-      users: state.users.filter(u => u._id !== id)
+      users: state.users.filter(u => u.id !== id)
     }), () => this.props.history.push('/users'));
   }
 
