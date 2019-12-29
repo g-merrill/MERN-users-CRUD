@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
+import ErrorMsg from '../components/ErrorMsg';
 
 class AddUser extends Component {
   state = {
@@ -9,7 +10,8 @@ class AddUser extends Component {
       lastName: '',
       username: '',
       email: '',
-      password: ''
+      password: '',
+      passwordConfirm: ''
     }
   };
 
@@ -17,7 +19,10 @@ class AddUser extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.handleAddUser(this.state.formData);
+    if (this.state.formData.password !== this.state.formData.passwordConfirm) return;
+    let newUser = {...this.state.formData};
+    delete newUser.passwordConfirm;
+    this.props.handleAddUser(newUser);
   };
 
   handleChange = e => {
@@ -27,6 +32,10 @@ class AddUser extends Component {
       invalidForm: !this.formRef.current.checkValidity()
     });
   };
+
+  componentWillUnmount() {
+    this.props.clearAddUserError();
+  }
 
   render() {
     return (
@@ -51,6 +60,17 @@ class AddUser extends Component {
               name="password"
               type="password"
               value={this.state.formData.password}
+              onChange={this.handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Confirm Password (required)</label>
+            <input
+              className="form-control"
+              name="passwordConfirm"
+              type="password"
+              value={this.state.formData.passwordConfirm}
               onChange={this.handleChange}
               required
             />
@@ -82,14 +102,19 @@ class AddUser extends Component {
               onChange={this.handleChange}
             />
           </div>
-          <button
-            type="submit"
-            className="btn"
-            disabled={this.state.invalidForm}
-          >
-            ADD USER
-          </button>
-          <Link to='/users'>CANCEL</Link>
+          <div className="form-group">
+            <button
+              type="submit"
+              className="btn"
+              disabled={this.state.invalidForm}
+            >
+              ADD USER
+            </button>
+            <Link to='/users'>CANCEL</Link>
+            {this.props.addUserError && 
+            <ErrorMsg message={this.props.addUserError} />
+            }
+          </div>
         </form>
       </>
     );

@@ -1,17 +1,25 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import ErrorMsg from '../components/ErrorMsg';
 
 class EditUser extends Component {
   state = {
     invalidForm: false,
-    formData: this.props.location.state.user
+    formData: {
+      ...this.props.location.state.user,
+      password: '',
+      passwordConfirm: ''
+    }
   };
 
   formRef = React.createRef();
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.handleUpdateUser(this.state.formData);
+    if (this.state.formData.password !== this.state.formData.passwordConfirm) return;
+    let updatedUser = {...this.state.formData};
+    delete updatedUser.passwordConfirm;
+    this.props.handleUpdateUser(updatedUser);
   };
 
   handleChange = e => {
@@ -21,6 +29,10 @@ class EditUser extends Component {
       invalidForm: !this.formRef.current.checkValidity()
     });
   };
+
+  componentWillUnmount() {
+    this.props.clearEditUserError();
+  }
 
   render() {
     return (
@@ -45,6 +57,17 @@ class EditUser extends Component {
               name="password"
               type="password"
               value={this.state.formData.password}
+              onChange={this.handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Confirm Password (required)</label>
+            <input
+              className="form-control"
+              name="passwordConfirm"
+              type="password"
+              value={this.state.formData.passwordConfirm}
               onChange={this.handleChange}
               required
             />
@@ -84,6 +107,9 @@ class EditUser extends Component {
             SAVE USER
           </button>&nbsp;&nbsp;
           <Link to='/users'>CANCEL</Link>
+          {this.props.editUserError && 
+          <ErrorMsg message={this.props.editUserError} />
+          }
         </form>
       </>
     );

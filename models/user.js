@@ -1,18 +1,3 @@
-// const mongoose = require('mongoose');
-// const Schema = mongoose.Schema;
-
-// const userSchema = new Schema({
-//   firstName: {type: String},
-//   lastName: {type: String},
-//   username: {type: String, unique: true},
-//   email: {type: String, required: true, unique: true},
-//   password: {type: String, required: true},
-// },{
-//   timestamps: true
-// });
-
-// module.exports = mongoose.model('User', userSchema);
-
 const Sequelize = require('sequelize');
 const sequelize = require('../config/database');
 
@@ -24,11 +9,13 @@ const User = sequelize.define('user', {
     type: Sequelize.STRING
   },
   username: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+    unique: true
   },
   email: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   password: {
     type: Sequelize.STRING,
@@ -40,7 +27,7 @@ const User = sequelize.define('user', {
 User.sync({ force: true }).then(() => {
   // Now the `users` table in the database corresponds to the model definition
   return User.create({
-    email: 'test@email.com',
+    email: 't@t.com',
     password: 'test'
   });
 });

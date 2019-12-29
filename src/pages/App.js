@@ -9,26 +9,68 @@ import EditUser from './EditUser';
 
 class App extends Component {
   state = {
-    users: []
+    users: [],
+    errorMessages: {
+      addUserError: '',
+      editUserError: ''
+    }
   };
 
   handleAddUser = async newUserData => {
-    const newUser = await userAPI.create(newUserData);
-    this.setState(state => ({
-      users: [...state.users, newUser]
-    }), () => this.props.history.push('/users'));
+    try {      
+      const newUser = await userAPI.create(newUserData);
+      this.setState(state => ({
+        users: [...state.users, newUser],
+        errorMessages: {...state.errorMessages, addUserError: ''}
+      }),
+      () => this.props.history.push('/users'));
+    } catch (error) {
+      const errorMessages = {
+        ...this.state.errorMessages, 
+        addUserError: error.message
+      };
+      this.setState({ errorMessages });
+    }
+  }
+
+  clearAddUserError = () => {
+    const errorMessages = {
+      ...this.state.errorMessages, 
+      addUserError: ''
+    };
+    this.setState({ errorMessages });
   }
 
   handleUpdateUser = async updatedUserData => {
-    const updatedUser = await userAPI.update(updatedUserData);
-    const newUsersArray = this.state.users.map(u => 
-      u.id === updatedUser.id ? updatedUser : u
-    );
-    this.setState(
-      {users: newUsersArray},
-      // Using cb to wait for state to update before rerouting
-      () => this.props.history.push('/users')
-    );
+    try {
+      const updatedUser = await userAPI.update(updatedUserData);
+      const newUsersArray = this.state.users.map(u => 
+        u.id === updatedUser.id ? updatedUser : u
+      );
+      this.setState({ 
+          users: newUsersArray,
+          errorMessages: {
+            ...this.state.errorMessages, 
+            editUserError: ''
+          }
+        },
+        () => this.props.history.push('/users')
+      );
+    } catch (error) {
+      const errorMessages = {
+        ...this.state.errorMessages, 
+        editUserError: error.message
+      };
+      this.setState({ errorMessages });
+    }
+  }
+
+  clearEditUserError = () => {
+    const errorMessages = {
+      ...this.state.errorMessages, 
+      editUserError: ''
+    };
+    this.setState({ errorMessages });
   }
 
   handleDeleteUser= async id => {
@@ -43,7 +85,7 @@ class App extends Component {
 
   async componentDidMount() {
     const users = await userAPI.getAll();
-    this.setState({users});
+    this.setState({ users });
   }
 
   render() {
@@ -61,7 +103,7 @@ class App extends Component {
           <Route exact path='/' render={() => 
             <Redirect to='/users' />
           }/>
-          <Route exact path='/users' render={({history}) => 
+          <Route exact path='/users' render={() => 
             <UserList
               users={this.state.users}
               handleDeleteUser={this.handleDeleteUser}
@@ -69,13 +111,17 @@ class App extends Component {
           } />
           <Route exact path='/user/add' render={() => 
             <AddUser
-              handleAddUser = {this.handleAddUser}
+              handleAddUser={this.handleAddUser}
+              clearAddUserError={this.clearAddUserError}
+              addUserError={this.state.errorMessages.addUserError}
             />
           } />
-          <Route exact path='/user/edit' render={({history, location}) => 
+          <Route exact path='/user/edit' render={({location}) => 
             <EditUser
-              handleUpdateUser={this.handleUpdateUser}
               location={location}
+              handleUpdateUser={this.handleUpdateUser}
+              clearEditUserError={this.clearEditUserError}
+              editUserError={this.state.errorMessages.editUserError}
             />
           } />
         </main>

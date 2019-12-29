@@ -9,7 +9,8 @@ module.exports = {
 };
 
 async function index(req, res) {
-  const users = await db.User.findAll();
+  let users = await db.User.findAll();
+  users.forEach(user => delete user.dataValues.password);
   res.status(200).json(users);
 }
 
@@ -19,8 +20,13 @@ async function show(req, res) {
 }
 
 async function create(req, res) {
-  const user = await db.User.create(req.body);
-  res.status(201).json(user);
+  try {
+    let user = await db.User.create(req.body);
+    delete user.dataValues.password;
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(400).end();
+  }
 }
 
 async function deleteOne(req, res) {
@@ -29,7 +35,12 @@ async function deleteOne(req, res) {
 }
 
 async function update(req, res) {
-  await db.User.update(req.body, { where: { id: req.params.id }});
-  const updatedUser = await db.User.findByPk(req.params.id);
-  res.status(200).json(updatedUser);
+  try {
+    await db.User.update(req.body, { where: { id: req.params.id }});
+    let updatedUser = await db.User.findByPk(req.params.id);
+    delete updatedUser.dataValues.password;
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).end();
+  }
 }
